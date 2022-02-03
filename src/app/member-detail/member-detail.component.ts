@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Member } from '../member'
+import { Component, OnInit, Input } from '@angular/core';
+import { Member } from '../member';
 
 @Component({
   selector: 'app-member-detail',
@@ -8,6 +8,7 @@ import { Member } from '../member'
 })
 export class MemberDetailComponent implements OnInit {
   @Input() member: Member;
+
   constructor() { }
 
   ngOnInit(): void {
