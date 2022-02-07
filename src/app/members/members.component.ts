@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Member } from '../member';
 import { MemberService } from '../member.service';
 import { MessageService } from '../message.service';
@@ -8,23 +8,14 @@ import { MessageService } from '../message.service';
   templateUrl: './members.component.html',
   styleUrls: ['./members.component.css']
 })
-export class MembersComponent implements OnInit {
+export class MembersComponent {
 
   members: Member[];
-  selectedMember: Member;
 
-  constructor(
-    private memberService: MemberService,
-    private messageService: MessageService
-  ) { }
+  constructor(private memberService: MemberService) { }
 
   ngOnInit(): void {
     this.getMembers();
-  }
-
-  onSelect(member: Member): void {
-    this.selectedMember = member;
-    this.messageService.add(`MembersComponent: 社員データ(id=${member.id})が選択されました`);
   }
 
   getMembers(): void {
@@ -32,4 +23,17 @@ export class MembersComponent implements OnInit {
       .subscribe(members => this.members = members);
   }
 
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return; }
+    this.memberService.addMember({ name } as Member)
+      .subscribe(member => {
+        this.members.push(member);
+      });
+  }
+
+  delete(member: Member): void {
+    this.members = this.members.filter(m => m !== member);
+    this.memberService.deleteMember(member).subscribe();
+  }
 }

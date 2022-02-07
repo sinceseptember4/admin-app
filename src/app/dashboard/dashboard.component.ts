@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Member } from '../member';
 import { MemberService } from '../member.service';
 
 @Component({
@@ -12,11 +13,12 @@ export class DashboardComponent implements OnInit {
   constructor(private memberService: MemberService) { }
 
   ngOnInit(): void {
+    this.getMembers();
   }
 
   getMembers(): void {
     this.memberService.getMembers()
-      .subscribe(members => this.members = members.slice(1,5));
+      .subscribe(members => this.members = members.slice(1, 5));
   }
 
 }
