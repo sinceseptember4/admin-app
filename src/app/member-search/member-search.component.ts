@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { debounce, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Member } from '../member';
 import { MemberService } from '../member.service';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-member-search',
@@ -13,9 +13,9 @@ export class MemberSearchComponent implements OnInit {
   members$: Observable<Member[]>;
   private searchTerms = new Subject<string>();
 
-  constructor(private MemberService: MemberService) { }
+  constructor(private memberService: MemberService) { }
 
-  search(term: string) :void {
+  search(term: string): void {
     this.searchTerms.next(term);
   }
 
@@ -23,8 +23,7 @@ export class MemberSearchComponent implements OnInit {
     this.members$ = this.searchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((term: string) => this.MemberService.searchMembers((term)))
-
+      switchMap((term: string) => this.memberService.searchMembers(term))
     );
   }
 
